@@ -13,3 +13,11 @@ cd blog && npm install
 SET DEBUG=blog:* & npm start
 ```
 
+
+#安装bootstrap
+```
+touch .bowerrc            创建配置文件指定下载后的包的存放目录
+bower init                初始化bower.json配置文件
+bower install bootstrap --save   安装bootstrap
+```
+
