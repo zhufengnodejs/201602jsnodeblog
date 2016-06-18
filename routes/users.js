@@ -9,12 +9,12 @@ router.get('/reg', function(req, res, next) {
 
 //用户登陆
 router.get('/login', function(req, res, next) {
-  res.send('登陆');
+  res.render('user/login');
 });
 
 //用户退出
 router.get('/logout', function(req, res, next) {
-  res.send('退出');
+  res.redirect('/');
 });
 
 module.exports = router;
