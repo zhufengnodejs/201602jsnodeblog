@@ -1,3 +1,4 @@
+// user.avatar = "https://secure.gravatar.com/avatar/"+md5(user.email)+"?s=48";
 var express = require('express');
 var path = require('path');
 //处理收藏夹图标
