@@ -7,6 +7,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 //处理cookie 会在request添加 cookies对象 {}
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 //处理请求体 json urlencoded
 var bodyParser = require('body-parser');
 //路由
@@ -29,6 +30,16 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));//是否使用默认的querystring来将字符串转成json
 app.use(cookieParser());// req.cookies
+//当使用session中间件之后，会在多一个 req.session
+app.use(session({
+  secret:'zfpx',//加密cookie
+  resave:true,
+  saveUninitialized:true
+}));
+app.use(function(req,res,next){
+  res.locals.user = req.session.user;//把session中的user取出来赋给模板变量对象
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);

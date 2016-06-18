@@ -4,7 +4,7 @@ var Model = require('../db');
 //用户注册
 router.get('/reg', function(req, res, next) {
   //这是相对路径，是相对于views的相对路径
-  res.render('user/reg', { title: '注册' });
+  res.render('user/reg', { title: '注册'});
 });
 /**
  * 1. 任意长度的输入会产生相同长度的输出。
@@ -19,14 +19,14 @@ function md5(str){
 router.post('/reg', function(req, res, next) {
    var user = req.body;//得到请求体
    //创建一个entity并保存到数据库中
-  user.avatar = "https://secure.gravatar.com/avatar/"+md5(user.email)+"?s=48";
+  user.avatar = "https://secure.gravatar.com/avatar/"+md5(user.email)+"?s=25";
     user.password = md5(user.password);
    new Model.User(user).save(function(err,doc){
      if(err){
-        console.error(err);
         res.redirect('back');//回到上一个页面
      }else{
-         console.log(doc);
+         //把保存之后的用户对象设置为session的属性
+       req.session.user = doc;
        res.redirect('/');
      }
    });
@@ -37,8 +37,22 @@ router.get('/login', function(req, res, next) {
   res.render('user/login', { title: '登录' });
 });
 
+router.post('/login', function(req, res, next) {
+    var user = req.body;//得到请求体
+    user.password = md5(user.password);
+    Model.User.findOne(user,function(err,doc){
+        if(err){
+            res.redirect('back');
+        }else{
+            req.session.user = doc;
+            res.redirect('/');
+        }
+    });
+});
+
 //用户退出
 router.get('/logout', function(req, res, next) {
+  req.session.user = null;
   res.redirect('/');
 });
 
