@@ -3,7 +3,8 @@ var router = express.Router();
 
 //用户注册
 router.get('/reg', function(req, res, next) {
-  res.send('注册');
+  //这是相对路径，是相对于views的相对路径
+  res.render('user/reg');
 });
 
 //用户登陆

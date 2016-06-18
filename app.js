@@ -19,8 +19,9 @@ var app = express();
 
 //设置模板引擎和模板和存放目录
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
+app.set('view engine', 'html');//指定模板引擎为html
+//指定对于html模板需要使用ejs来进行渲染
+app.engine('html',require('ejs').__express);
 //当你把收藏夹图标放在public目录之下的时候就就可以取消注释
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
