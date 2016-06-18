@@ -3,8 +3,9 @@
 /**
  * Module dependencies.
  */
-
+//引入app
 var app = require('../app');
+//引入debug
 var debug = require('debug')('201602jsnodeblog:server');
 var http = require('http');
 
