@@ -1,11 +1,16 @@
 var express = require('express');
 var path = require('path');
+//处理收藏夹图标
 var favicon = require('serve-favicon');
+//访问日志记录器
 var logger = require('morgan');
+//处理cookie 会在request添加 cookies对象 {}
 var cookieParser = require('cookie-parser');
+//处理请求体 json urlencoded
 var bodyParser = require('body-parser');
-
+//路由
 var routes = require('./routes/index');
+//路由
 var users = require('./routes/users');
 //调用express方法生成的应用实例
 var app = express();

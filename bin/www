@@ -5,29 +5,37 @@
  */
 //引入app
 var app = require('../app');
-//引入debug
+//引入debug创建一个日志记录器 用来向控制台写日志的
 var debug = require('debug')('201602jsnodeblog:server');
+//引入http模块启动http服务
 var http = require('http');
 
 /**
  * Get port from environment and store in Express.
+ * 从环境变量中获取端口号并且保存到Express中
  */
 
 var port = normalizePort(process.env.PORT || '3000');
+//保存一个变量
 app.set('port', port);
 
 /**
  * Create HTTP server.
+ * 创建一个http服务器
+ * app 是一个请求到来的时候执行的监听 回调函数
  */
 
 var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
+ * 监听端口
  */
 
 server.listen(port);
+//监听 error事件
 server.on('error', onError);
+//如果启动成功的话会执行onListening
 server.on('listening', onListening);
 
 /**
@@ -65,11 +73,11 @@ function onError(error) {
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case 'EACCES':
+    case 'EACCES':// access 访问 在linux中只有 root管理员用户才能使用 1000以下的端口
       console.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
-    case 'EADDRINUSE':
+    case 'EADDRINUSE'://Error address in use 端口被占用
       console.error(bind + ' is already in use');
       process.exit(1);
       break;
