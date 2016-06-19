@@ -21,3 +21,4 @@ bower init                初始化bower.json配置文件
 bower install bootstrap --save   安装bootstrap
 ```
 
+#实现发表文章的功能

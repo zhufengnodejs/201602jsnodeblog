@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: false }));//是否使用默认的query
 app.use(cookieParser());// req.cookies
 //当使用session中间件之后，会在多一个 req.session
 app.use(session({
-  secret:'zfpx',//加密cookie
+  secret:'5',//加密cookie
   resave:true,
   saveUninitialized:true
 }));
