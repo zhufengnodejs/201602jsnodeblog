@@ -12,6 +12,9 @@ articles.forEach(function(article){%>
         <p>
             <%-article.content.length>50?article.content.slice(0,50)+'...':article.content%>
         </p>
+        <p>
+            PV:<%=article.pv%> 评论数:<%=article.comments.length%>
+        </p>
     </div>
 </div>
 <%});

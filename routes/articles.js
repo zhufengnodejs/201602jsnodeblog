@@ -3,7 +3,7 @@ var Model = require('../db');
 var middle = require('../middle');
 var markdown = require('markdown').markdown;
 var router = express.Router();
-
+var async = require('async');
 //显示文章列表
 router.get('/list/:pageNum/:pageSize', function (req, res, next) {
     // populate 用于把ID转成对象
@@ -65,14 +65,16 @@ router.post('/add', middle.checkLogin, function (req, res, next) {
     } else {//否则认为是新增加
 //把session中的用户ID赋给文章的作者
         article.user = req.session.user._id;
-        if ((!article.title) || (!article.content)) {
+       /* if ((!article.title) || (!article.content)) {
             req.flash('error', '标题或正文不能为空');
             req.flash('error', '发表文章失败');
             return res.redirect('back');
-        }
+        }*/
+        delete article._id;//把_id删除掉，不然的话会导致转换成ObjectId的时候失败
         //创建文章的entity也就是实体并保存到数据库中
         new Model.Article(article).save(function (err, doc) {
             if (err) {
+                console.log(err);
                 //传二个参数表示赋值，第一个参数是类型，第二个是信息
                 //它们实际是保存在session中，所以一旦写入，可以在下次请求中得到
                 req.flash('error', '发表文章失败');
@@ -96,16 +98,28 @@ router.post('/add', middle.checkLogin, function (req, res, next) {
  */
 router.get('/detail/:_id', function (req, res) {
     var _id = req.params._id;
-    // doc.comments[].user 默认是个字符串 现在要转成对象
-    Model.Article.findOne({_id:_id}).populate('comments.user').exec(function (err, doc) {
+    async.parallel([
+        function(cb){
+            Model.Article.update({_id:_id},{$inc:{pv:1}},function(err,result){
+                cb(err);
+            })
+        },
+        function(cb){
+            // doc.comments[].user 默认是个字符串 现在要转成对象
+            Model.Article.findOne({_id:_id}).populate('comments.user').exec(function (err, doc) {
+                cb(err,doc);
+            })
+        }
+    ],function(err,result){
         if (err) {
             req.flash('error', err);
             res.redirect('back');
         } else {
             req.flash('success', '查看文章成功');
-            res.render('article/detail', {title: '文章详情', article: doc});
+            res.render('article/detail', {title: '文章详情', article: result[1]});
         }
-    })
+    });
+
 });
 
 router.get('/delete/:_id', function (req, res) {

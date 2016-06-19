@@ -18,6 +18,7 @@ exports.User = UserModel;
 var ArticleSchema = new mongoose.Schema({
   title:{type:String},
   content:{type:String},
+  pv:{type:Number,default:0},
   user:{type:mongoose.Schema.Types.ObjectId,ref:'user'}, //类型是一个对象ID对象，引用模型是usr
   createAt:{type:Date,default:Date.now()},
   comments:[{user:{type:mongoose.Schema.Types.ObjectId,ref:'user'},
