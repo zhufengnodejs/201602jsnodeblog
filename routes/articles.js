@@ -44,4 +44,38 @@ router.post('/add',middle.checkLogin, function(req, res, next) {
   });
 });
 
+// /articles/detail/xxxx
+/**
+ * query 查询字符串 ?后面的
+ * body 请求体
+ * session
+ * cookie 通过请求头传过来的
+ * url 路径参数
+ */
+router.get('/detail/:_id',function(req,res){
+  var _id = req.params._id;
+  Model.Article.findById(_id,function(err,doc){
+    if(err){
+      req.flash('error',err);
+      res.redirect('back');
+    }else{
+      req.flash('success','查看文章成功');
+      res.render('article/detail',{title:'文章详情',article:doc});
+    }
+  })
+});
+
+router.get('/delete/:_id',function(req,res){
+  var _id = req.params._id;
+  Model.Article.remove({_id:_id},function(err,result){
+    if(err){
+      req.flash('error','删除文章失败');
+      res.redirect('back');
+    }else{
+      req.flash('success','删除文章成功');
+      res.redirect('/articles/list');
+    }
+  });
+});
+
 module.exports = router;
