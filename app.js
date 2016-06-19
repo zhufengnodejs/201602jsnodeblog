@@ -41,8 +41,13 @@ app.use(session({
     url:config.url
   })
 }));
+var flash = require('connect-flash');
+app.use(flash());//一闪而过 显示一次之后就被清除 req.flash()
 app.use(function(req,res,next){
   res.locals.user = req.session.user;//把session中的user取出来赋给模板变量对象
+  //把flash也就是session中的信息取出来赋给模板对象
+  res.locals.success = req.flash('success').toString();
+  res.locals.error = req.flash('error').toString();
   next();
 });
 app.use(express.static(path.join(__dirname, 'public')));

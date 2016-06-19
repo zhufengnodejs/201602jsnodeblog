@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var Model = require('../db');
+var middle = require('../middle');
 //用户注册
-router.get('/reg', function(req, res, next) {
+router.get('/reg',middle.checkNotLogin,function(req, res, next) {
   //这是相对路径，是相对于views的相对路径
   res.render('user/reg', { title: '注册'});
 });
@@ -16,7 +17,7 @@ function md5(str){
     return require('crypto').createHash('md5').update(str).digest('hex');
 }
 //注册 得到请求体中的对象并保存到数据库
-router.post('/reg', function(req, res, next) {
+router.post('/reg',middle.checkNotLogin, function(req, res, next) {
    var user = req.body;//得到请求体
    //创建一个entity并保存到数据库中
   user.avatar = "https://secure.gravatar.com/avatar/"+md5(user.email)+"?s=25";
@@ -33,11 +34,11 @@ router.post('/reg', function(req, res, next) {
 });
 
 //用户登陆
-router.get('/login', function(req, res, next) {
+router.get('/login',middle.checkNotLogin, function(req, res, next) {
   res.render('user/login', { title: '登录' });
 });
 
-router.post('/login', function(req, res, next) {
+router.post('/login',middle.checkNotLogin, function(req, res, next) {
     var user = req.body;//得到请求体
     user.password = md5(user.password);
     Model.User.findOne(user,function(err,doc){
@@ -51,7 +52,7 @@ router.post('/login', function(req, res, next) {
 });
 
 //用户退出
-router.get('/logout', function(req, res, next) {
+router.get('/logout',middle.checkLogin,function(req, res, next) {
   req.session.user = null;
   res.redirect('/');
 });
