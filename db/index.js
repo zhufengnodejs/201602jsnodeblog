@@ -19,7 +19,11 @@ var ArticleSchema = new mongoose.Schema({
   title:{type:String},
   content:{type:String},
   user:{type:mongoose.Schema.Types.ObjectId,ref:'user'}, //类型是一个对象ID对象，引用模型是usr
-  createAt:{type:Date,default:Date.now()}
+  createAt:{type:Date,default:Date.now()},
+  comments:[{user:{type:mongoose.Schema.Types.ObjectId,ref:'user'},
+             content:{type:String},
+             createAt:{type:Date,default:Date.now()}
+  }]
 })
 //定义一个文章相关的模型
 var ArticleModel = mongoose.model('article',ArticleSchema);
