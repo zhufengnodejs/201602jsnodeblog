@@ -60,9 +60,10 @@ app.use('/articles', articles);
 // catch 404 and forward to error handler
 // 捕获404错误并且转向错误处理中单件
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+ /* var err = new Error('Not Found');
   err.status = 404;
-  next(err);//有参数则意味着出错了，跳过正常的中间件，直接 交给错误中间件
+  next(err);//有参数则意味着出错了，跳过正常的中间件，直接 交给错误中间件*/
+  res.render('404',{title:'页面未找到'});
 });
 
 // error handlers 错误处理

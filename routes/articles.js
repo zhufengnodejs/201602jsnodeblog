@@ -100,13 +100,13 @@ router.get('/detail/:_id', function (req, res) {
     var _id = req.params._id;
     async.parallel([
         function(cb){
-            Model.Article.update({_id:_id},{$inc:{pv:1}},function(err,result){
+            Model.Article.update({_id:_id},{$inc:{pv:1}},function(err,result){//负责把pv加1
                 cb(err);
             })
         },
         function(cb){
             // doc.comments[].user 默认是个字符串 现在要转成对象
-            Model.Article.findOne({_id:_id}).populate('comments.user').exec(function (err, doc) {
+            Model.Article.findOne({_id:_id}).populate('comments.user').exec(function (err, doc) { //负责从ID得到完整的文章对象
                 cb(err,doc);
             })
         }
