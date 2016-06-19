@@ -48,6 +48,7 @@ app.use(function(req,res,next){
   //把flash也就是session中的信息取出来赋给模板对象
   res.locals.success = req.flash('success').toString();
   res.locals.error = req.flash('error').toString();
+  res.locals.keyword = '';//给keyword赋默认值，以表示所有的模板都可以使用这个keyword变量
   next();
 });
 app.use(express.static(path.join(__dirname, 'public')));

@@ -17,4 +17,30 @@ articles.forEach(function(article){%>
 <%});
 %>
 
+<nav>
+    <ul class="pagination">
+        <%if(pageNum>1){%>
+        <li>
+            <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <%} %>
+
+        <%
+          for(var i=1;i<=totalPage;i++){%>
+              <li class="<%=i==pageNum?'active':''%>"><a href="/articles/list/<%=i%>/<%=pageSize%>"><%=i%></a></li>
+        <%}
+        %>
+        <%if(pageNum<totalPage){%>
+            <li>
+                <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        <%} %>
+
+    </ul>
+</nav>
+
 <%include ../include/footer.html %>

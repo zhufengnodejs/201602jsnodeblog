@@ -5,15 +5,41 @@ var markdown = require('markdown').markdown;
 var router = express.Router();
 
 //显示文章列表
-router.get('/list',function(req, res, next) {
+router.get('/list/:pageNum/:pageSize',function(req, res, next) {
   // populate 用于把ID转成对象
   // article.user 5766020df6be175c04ee060a => {user:{_id,username}}
-  Model.Article.find({}).populate('user').exec(function(err,articles){
-    articles.forEach(function(article){
-      article.content = markdown.toHTML(article.content);
+  var keyword = req.query.keyword;//取得查询字符串对象的keyword值
+  var query = {};
+  //判断此文件的标题或内容中有关键词存在
+  if(keyword){
+    var reg = new RegExp(keyword);//得到正则
+    //标题和内容中只要有一个包含关键字正则就可以满足条件
+    query['$or'] = [{title:reg},{content:reg}];
+  }
+  /**
+   *  总页数
+   *     每页的条数
+   *     当前页
+   */
+  var pageNum = isNaN(req.params.pageNum)?1:parseInt(req.params.pageNum);
+  var pageSize = isNaN(req.params.pageSize)?2:parseInt(req.params.pageSize);
+  Model.Article.count(query,function(err,count){
+    var totalPage = Math.ceil(count/pageSize);
+    Model.Article.find(query).skip((pageNum-1)*pageSize).limit(pageSize).populate('user').exec(function(err,articles){
+      articles.forEach(function(article){
+        article.content = markdown.toHTML(article.content);
+      });
+      res.render('article/list',{
+        title: '首页',
+        articles:articles,
+        keyword:keyword,
+        pageNum:pageNum,
+        pageSize:pageSize,
+        totalPage:totalPage
+      });
     });
-    res.render('article/list',{ title: '首页',articles:articles });
-  });
+  })
+
 });
 
 //发表博客
