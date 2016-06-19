@@ -3,6 +3,16 @@ var Model = require('../db');
 var middle = require('../middle');
 var router = express.Router();
 
+//显示文章列表
+router.get('/list',function(req, res, next) {
+  // populate 用于把ID转成对象
+  // article.user 5766020df6be175c04ee060a => {user:{_id,username}}
+  Model.Article.find({}).populate('user').exec(function(err,articles){
+    console.log(articles);
+    res.render('article/list',{ title: '首页',articles:articles });
+  });
+});
+
 //发表博客
 router.get('/add',middle.checkLogin, function(req, res, next) {
   res.render('article/add',{ title: '发表文章' });
