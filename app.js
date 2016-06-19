@@ -8,6 +8,7 @@ var logger = require('morgan');
 //处理cookie 会在request添加 cookies对象 {}
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 //处理请求体 json urlencoded
 var bodyParser = require('body-parser');
 //路由
@@ -31,10 +32,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));//是否使用默认的querystring来将字符串转成json
 app.use(cookieParser());// req.cookies
 //当使用session中间件之后，会在多一个 req.session
+var config = require('./config');
 app.use(session({
   secret:'5',//加密cookie
   resave:true,
-  saveUninitialized:true
+  saveUninitialized:true,
+  store:new MongoStore({
+    url:config.url
+  })
 }));
 app.use(function(req,res,next){
   res.locals.user = req.session.user;//把session中的user取出来赋给模板变量对象

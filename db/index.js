@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var config = require('../config');
 //连接数据库
-mongoose.connect('mongodb://123.57.143.189/201602jsblog');
+mongoose.connect(config.url);
 //创建用户schema
 var UserSchema = new mongoose.Schema({
    username:{type:String},   //用户名
@@ -22,5 +23,5 @@ var ArticleSchema = new mongoose.Schema({
 })
 //定义一个文章相关的模型
 var ArticleModel = mongoose.model('article',ArticleSchema);
-
+//导出用户对象
 exports.Article = ArticleModel;
